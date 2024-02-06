@@ -406,17 +406,25 @@ int main()
                 if (input == "levelup") {
                     LevelUp();
                 }
-                else if (input == "skill1") {
-                    // Handle skill 1 action
-                    cout << "Skill 1 activated!" << endl;
+                else if (input == "Fire") {
+                    // Handle Fire action
+                    cout << "Fire activated!" << endl;
                 }
-                else if (input == "skill2") {
-                    // Handle skill 2 action
-                    cout << "Skill 2 activated!" << endl;
+                else if (input == "Bloodletting") {
+                    // Handle Bloodletting action
+                    cout << "Bloodletting activated!" << endl;
                 }
-                else if (input == "skill3") {
-                    // Handle skill 3 action
-                    cout << "Skill 3 activated!" << endl;
+                else if (input == "Icy bite") {
+                    // Handle Icy bite action
+                    cout << "Icy bite activated!" << endl;
+                }
+                else if (input == "Sword Aura") {
+                    // Handle Sword Aura action
+                    cout << "Sword Aura activated!" << endl;
+                }
+                else if (input == "Sword Mastery") {
+                    // Handle Sword Mastery action
+                    cout << "Sword Mastery activated!" << endl;
                 }
                 else {
                     ProcessDevCommand(input);
