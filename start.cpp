@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <random> // For random number generation
 
 // ! to make sure code runs.
 
@@ -112,62 +113,55 @@ using namespace std;
 // Define the Skill class
 class Skill {
 public:
-    // Constructor to initialize skill name and damage
-    Skill(string name, int damage) {
+    // Constructor to initialize skill name, damage, and effect
+    Skill(string name, int damage, string effect) {
         this->name = name;
         this->damage = damage;
+        this->effect = effect;
     }
 
     // Function to apply the skill
-    void apply(Health& target, vector<string>& statusEffects) {
-        // Check if the target has the required status effects
-        bool hasRequiredStatusEffects = true;
-        for (string statusEffect : requiredStatusEffects) {
-            if (find(statusEffects.begin(), statusEffects.end(), statusEffect) == statusEffects.end()) {
-                hasRequiredStatusEffects = false;
-                break;
-            }
-        }
-
-        // If the target has the required status effects, apply the skill
-        if (hasRequiredStatusEffects) {
-            target.applyStatusEffects(statusEffects);
-            target.health -= damage;
-            cout << "You used " << name << "!" << endl;
+    void apply(Health& target, bool swordAuraActive, int swordMasteryLevel) {
+        // Check if the skill is affected by the sword aura
+        if (swordAuraActive && hasStatusEffect()) {
+            // Apply the skill with reduced effectiveness based on Sword Mastery level
+            int reducedDamage = static_cast<int>(damage * (1.0 - (swordMasteryLevel * 0.05))); // Reduce negative effect by 5% per level
+            target.applyStatusEffect(effect);
+            target.health -= reducedDamage;
+            cout << "You used " << name << " with reduced effectiveness due to Sword Aura and Sword Mastery level " << swordMasteryLevel << "!" << endl;
         } else {
-            cout << "You don't have the required status effects to use " << name << "!" << endl;
+            // Apply the skill normally based on Sword Mastery level
+            int modifiedDamage = damage + (swordMasteryLevel * 3); // Increase flat damage by 3 per level
+            target.applyStatusEffect(effect);
+            target.health -= modifiedDamage;
+            cout << "You used " << name << " and triggered the " << effect << " effect with Sword Mastery level " << swordMasteryLevel << "!" << endl;
         }
     }
 
 private:
     string name;
     int damage;
-    vector<string> requiredStatusEffects;
+    string effect;
+
+    // Function to check if the skill has a status effect
+    bool hasStatusEffect() {
+        return (effect == "burning" || effect == "bleeding" || effect == "frostbite");
+    }
 };
 
 // Define the Health class
 class Health {
 public:
-    // Constructor to initialize health and status effects
-    Health(int initialHealth, vector<string> statusEffects) {
+    // Constructor to initialize health
+    Health(int initialHealth) {
         health = initialHealth;
-        this->statusEffects = statusEffects;
     }
 
-    // Function to apply status effects
-    void applyStatusEffects(vector<string> statusEffects) {
-        // Iterate through each status effect
-        for (string statusEffect : statusEffects) {
-            // Apply the status effect
-            if (statusEffect == "burning") {
-                health -= 2; // 2% DoT
-            } else if (statusEffect == "bleeding") {
-                health -= 3.5; // 3.5% DoT
-            } else if (statusEffect == "frostbitten") {
-                // Slow the player by 65%
-                cout << "You are slowed by 65% due to frostbite!" << endl;
-            }
-        }
+    // Function to apply a status effect
+    void applyStatusEffect(string effect) {
+        // Apply the status effect
+        // Code to apply the specific effect goes here
+        cout << "The " << effect << " effect is applied!" << endl;
     }
 
     // Function to print the health
@@ -177,22 +171,20 @@ public:
 
 private:
     int health;
-    vector<string> statusEffects;
 };
 
 int main() {
-    // Initialize health and status effects
+    // Initialize health
     int initialHealth = 100;
-    vector<string> statusEffects = {"burning", "bleeding"};
-
-    // Create a Health object
-    Health playerHealth(initialHealth, statusEffects);
+    Health playerHealth(initialHealth);
 
     // Create a vector of skills
     vector<Skill> skills;
-    skills.push_back(Skill("Fireball", 10));
-    skills.push_back(Skill("Bloodletting", 15));
-    skills.push_back(Skill("Ice Shard", 20));
+    skills.push_back(Skill("Fire", 10, "burning"));
+    skills.push_back(Skill("Bloodletting", 15, "bleeding"));
+    skills.push_back(Skill("Icy bite", 20, "frostbite"));
+    skills.push_back(Skill("Sword Aura", 0, "sword_aura")); // Special skill for Sword Aura
+    skills.push_back(Skill("Sword Mastery", 0, "sword_mastery")); // Special skill for Sword Mastery
 
     // Get the player's input
     string input;
@@ -210,7 +202,14 @@ int main() {
 
     // If the skill was found, apply it
     if (skill) {
-        skill->apply(playerHealth, statusEffects);
+        // Check if Sword Aura is active
+        bool swordAuraActive = (input == "Sword Aura");
+
+        // Check if Sword Mastery level is active
+        int swordMasteryLevel = 3; // Set the Sword Mastery level here
+
+        // Apply the skill
+        skill->apply(playerHealth, swordAuraActive, swordMasteryLevel);
     } else {
         cout << "Invalid skill!" << endl;
     }
