@@ -4,7 +4,9 @@
 #include <random> // For random number generation
 
 // ! to make sure code runs.
-
+{
+/// @brief 
+/// @return 
 int main() {
     std::cout << "Hello World!";
     return 0;
@@ -12,8 +14,8 @@ int main() {
 
 // ! health func.
 
-{
-using namespace std;
+
+ using namespace std;
 
 // * Define the Health class
 class Health {
@@ -81,6 +83,8 @@ int damage(int baseDamage) {
     return damageDealt;
 }
 
+/// @brief 
+/// @return 
 int main() {
     // Initialize the player's and enemy's health
     int playerHealth = 100;
