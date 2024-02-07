@@ -10,10 +10,11 @@ using namespace std;
 class Skill {
 public:
     // Constructor to initialize skill name, damage, and effect
-    Skill(string name, int damage, string effect) {
+    Skill(string name, int damage, string effect, bool isPassive = false) {
         this->name = name;
         this->damage = damage;
         this->effect = effect;
+        this->isPassive = isPassive;
     }
 
     // Function to apply the skill
@@ -75,6 +76,12 @@ public:
             target.applyStatusEffect("strong_bleed");
             target.health -= totalDamage;
             cout << "You used " << name << " and dealt " << totalDamage << " damage with strong bleed effect!" << endl;
+        } else if (name == "Sadistic") {
+            // Apply Sadistic
+            float increasedDamage = damage * (attackCounter * 0.01f); // Increase damage based on attack count
+            target.applyStatusEffect(effect);
+            target.health -= increasedDamage;
+            cout << "You used " << name << " and dealt " << increasedDamage << " damage!" << endl;
         } else {
             // Apply the skill normally based on Sword Mastery level
             int modifiedDamage = damage + (swordMasteryLevel * 3); // Increase flat damage by 3 per level
@@ -84,16 +91,35 @@ public:
         }
     }
 
+    // Function to update attack count for Sadistic skill
+    static void incrementAttackCounter() {
+        attackCounter++;
+    }
+
+    // Function to reset attack counter
+    static void resetAttackCounter() {
+        attackCounter = 0;
+    }
+
+    // Function to check if the skill has a status effect
+    bool hasStatusEffect() {
+        return (effect == "burning" || effect == "bleeding" || effect == "frostbite" || effect == "poisoned" || effect == "irradiated");
+    }
+
+    // Function to check if the skill is passive
+    bool isPassiveSkill() {
+        return isPassive;
+    }
+
 private:
     string name;
     int damage;
     string effect;
-
-    // Function to check if the skill has a status effect
-    bool hasStatusEffect() {
-        return (effect == "burning" || effect == "bleeding" || effect == "frostbite" || effect == "poisoned");
-    }
+    bool isPassive;
+    static int attackCounter;
 };
+
+int Skill::attackCounter = 0;
 
 // Define the Health class
 class Health {
@@ -132,19 +158,23 @@ int main() {
 
     // Create a vector of skills
     vector<Skill> skills;
-    skills.push_back(Skill("Fire", 10, "burning"));
-    skills.push_back(Skill("Bloodletting", 15, "bleeding"));
-    skills.push_back(Skill("Icy bite", 20, "frostbite"));
-    skills.push_back(Skill("Sword Aura", 0, "sword_aura")); // Special skill for Sword Aura
-    skills.push_back(Skill("Sword Mastery", 0, "sword_mastery")); // Special skill for Sword Mastery
-    skills.push_back(Skill("Poison Drops", 5, "poison"));
-    skills.push_back(Skill("Motivation", 0, "Motivation")); // ! Special buffing skill
-    skills.push_back(Skill("Axis Personality", 0, "axis_personality")); // ! Debuffs the player
-    skills.push_back(Skill("Pain Split", 0, "pain_split")); // ! Buff/debuff makes player deal 50% more damage but take 20% of damage dealt as damage to the player
-    skills.push_back(Skill("Sharp Edge", 0, "sharp_edge")); // ! Adds 40% more damage to all non-elemental attacks
-    skills.push_back(Skill("Pyromaniac", 0, "pyro")); // ! Deals 20% more damage but has a 5% chance to self ignite
-    skills.push_back(Skill("Kings Regression", 0, "kings_regression")); // ! Player stabs self causing 30% health loss and bleed status, but player gains bleed to all attacks and bleed does 60% more damage to enemies, lasting 2 minutes, has a cooldown of 3 minutes.
-    skills.push_back(Skill("Unholy Crown", 0, "unholy_crown")); // ! Player loses 20% of hp upon putting on the crown and gets stronger than normal bleeding status, but deals 50% more damage with ALL attacks
+    skills.push_back(Skill("Fire", 10, "burning", true));
+    skills.push_back(Skill("Bloodletting", 15, "bleeding", true));
+    skills.push_back(Skill("Icy bite", 20, "frostbite", true));
+    skills.push_back(Skill("Sword Aura", 0, "sword_aura", true)); // Special skill for Sword Aura
+    skills.push_back(Skill("Sword Mastery", 0, "sword_mastery", true)); // Special skill for Sword Mastery
+    skills.push_back(Skill("Poison Drops", 5, "poison", true));
+    skills.push_back(Skill("Motivation", 0, "Motivation", true)); // ! Special buffing skill
+    skills.push_back(Skill("Axis Personality", 0, "axis_personality", true)); // ! Debuffs the player
+    skills.push_back(Skill("Pain Split", 0, "pain_split"));
+    skills.push_back(Skill("Sharp Edge", 0, "sharp_edge", true)); // ! Adds 40% more damage to all non-elemental attacks
+    skills.push_back(Skill("Pyromaniac", 0, "pyro", true)); // ! Deals 20% more damage but has a 5% chance to self ignite
+    skills.push_back(Skill("Kings Regression", 0, "kings_regression", true)); // ! Player stabs self causing 30% health loss and bleed status, but player gains bleed to all attacks and bleed does 60% more damage to enemies, lasting 2 minutes, has a cooldown of 3 minutes.
+    skills.push_back(Skill("Unholy Crown", 0, "unholy_crown", true)); // ! Player loses 20% of hp upon putting on the crown and gets stronger than normal bleeding status, but deals 50% more damage with ALL attacks
+    skills.push_back(Skill("Ashen Slash", 15, "radioactive"));
+    skills.push_back(Skill("Gunsmith", 0, "gunsmith", true)); // ! Player's firearms deal 15% more damage and found and created weapons have a 27.5% chance to be of a higher tier. 1% chance for an upgrade to skip a tier.
+    skills.push_back(Skill("Brawler", 0, "brawler", true)); // ! Player deals 20% more damage with fists and has a 5% chance to bleed enemies, additive with motivation, sharp edge, Kings Regression, and Unholy Crown
+    skills.push_back(Skill("Sadistic", 0, "sadist", true)); // ! Deal increasing damage with each attack
 
     // Get the player's input
     string input;
@@ -176,7 +206,7 @@ int main() {
 
         // Apply the skill
         bool isActive = true; // Assume the skill is active by default
-        if (input == "Motivation" || input == "Sharp Edge" || input == "Pyromaniac") {
+        if (input == "Sadistic" || input == "Brawler" || input == "Gunsmith" || input == "Fire" || input == "Bloodletting" || input == "Icy bite" || input == "Sword Aura" || input == "Sword Mastery") {
             isActive = false; // These skills are passive
         }
         skill->apply(playerHealth, swordAuraActive, swordMasteryLevel, motivationActive, isActive);
