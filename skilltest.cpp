@@ -16,7 +16,7 @@ public:
     }
 
     // Function to apply the skill
-    void apply(class Health& target, bool swordAuraActive, int swordMasteryLevel) {
+    void apply(class Health& target, bool swordAuraActive, int swordMasteryLevel, int& axisDebuffStack) {
         // Check if the skill is affected by the sword aura
         if (swordAuraActive && hasStatusEffect()) {
             // Apply the skill with reduced effectiveness based on Sword Mastery level
@@ -30,6 +30,13 @@ public:
             target.applyStatusEffect(effect);
             target.health -= modifiedDamage;
             cout << "You used " << name << " and triggered the " << effect << " effect with Sword Mastery level " << swordMasteryLevel << "!" << endl;
+        }
+
+        // If the skill is "Axis Personality"
+        if (name == "Axis Personality") {
+            // Apply debuff and increase stack
+            axisDebuffStack += 200;
+            cout << "Axis Personality debuff applied! Player's stats are reduced by 200 times." << endl;
         }
     }
 
@@ -87,7 +94,11 @@ int main() {
     skills.push_back(Skill("Sword Aura", 0, "sword_aura")); // Special skill for Sword Aura
     skills.push_back(Skill("Sword Mastery", 0, "sword_mastery")); // Special skill for Sword Mastery
     skills.push_back(Skill("Poison Drops", 5, "poison"));
-    skills.push_back(Skill("Motivation", 0, "Motivation")); // ! Special buffing skill
+    skills.push_back(Skill("Motivation", 0, "Motivation")); // Special buffing skill
+    skills.push_back(Skill("Axis Personality", 0, "axis_personality")); // Special debuffing skill
+
+    // Initialize Axis Personality debuff stack
+    int axisDebuffStack = 0;
 
     // Get the player's input
     string input;
@@ -116,13 +127,23 @@ int main() {
             // Buff other skills and health by 15%
             for (Skill& s : skills) {
                 if (s.name != "Motivation") { // Exclude Motivation itself from buffing
-                    s.apply(playerHealth, swordAuraActive, swordMasteryLevel);
+                    s.apply(playerHealth, swordAuraActive, swordMasteryLevel, axisDebuffStack);
                 }
             }
             // Buff health and speed
             playerHealth.buffHealthAndSpeed(0.15f);
+        } else if (input == "Axis Personality") {
+            // Apply the debuff
+            skill->apply(playerHealth, swordAuraActive, swordMasteryLevel, axisDebuffStack);
+
+            // Check if the debuff stack is greater than or equal to 1000
+            if (axisDebuffStack >= 1000) {
+                // Apply bonus effect
+                playerHealth.buffHealthAndSpeed(0.50f); // Increase speed by 50%
+                cout << "Player's speed is increased by 50% due to high Axis Personality debuff stack!" << endl;
+            }
         } else {
-            skill->apply(playerHealth, swordAuraActive, swordMasteryLevel);
+            skill->apply(playerHealth, swordAuraActive, swordMasteryLevel, axisDebuffStack);
         }
     } else {
         cout << "Invalid skill!" << endl;
