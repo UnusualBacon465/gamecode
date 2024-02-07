@@ -14,7 +14,7 @@ const std::string specialMaterials[numTiers] = {
     "steel ingot",
     "mithril bar",
     "adamantine ingot",
-    "dragon scale"
+    "dragon scale" // * current materials are to be changed
 };
 
 // Function to generate a random weapon or equipment
