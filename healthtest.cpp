@@ -37,6 +37,14 @@ public:
             } else if (statusEffect == "cursed" && hasAxisPersonality) {
                 // Apply curse effect if the player has Axis Personality skill
                 cout << "You are cursed and deal 200% less damage due to Axis Personality!" << endl;
+            } else if (statusEffect == "heavy burning") {
+                // Apply heavy burning status effect
+                health -= 5; // Example: 5% DoT for heavy burning
+                cout << "You are heavily burned!" << endl;
+            } else if (statusEffect == "weak burning") {
+                // Apply weak burning status effect
+                health -= 1; // Example: 1% DoT for weak burning
+                cout << "You are lightly burned!" << endl;
             }
         }
     }

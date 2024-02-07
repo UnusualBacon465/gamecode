@@ -7,8 +7,9 @@
 #include <skill.cpp>
 #include <level.cpp>
 #include <devConsole.cpp>
-
-
+#include <tier.cpp>
+#include <rarity.cpp>
+#include <hud.cpp>
 
 // ! to make sure code runs.
 {

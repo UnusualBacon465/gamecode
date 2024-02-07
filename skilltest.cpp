@@ -20,6 +20,7 @@ public:
     // Function to apply the skill
     void apply(class Health& target, bool swordAuraActive, int swordMasteryLevel, bool motivationActive, bool isActive) {
         if (!isActive) return; // Exit if the skill is not active
+
         // Check if the skill is affected by the sword aura
         if (swordAuraActive && hasStatusEffect()) {
             // Apply the skill with reduced effectiveness based on Sword Mastery level
@@ -82,6 +83,46 @@ public:
             target.applyStatusEffect(effect);
             target.health -= increasedDamage;
             cout << "You used " << name << " and dealt " << increasedDamage << " damage!" << endl;
+        } else if (name == "Roots Of Hell") {
+            // Apply Roots Of Hell
+            // Delay before activation
+            cout << "Charging " << name << "... (5s)" << endl;
+            this_thread::sleep_for(chrono::seconds(5));
+
+            // Check if the skill is on cooldown
+            if (cooldownTimer > 0) {
+                cout << name << " is on cooldown! Remaining cooldown: " << cooldownTimer << "s" << endl;
+                return;
+            }
+
+            // Apply the skill effects
+            // Assuming the player is at position (0, 0) and enemies are represented as (x, y) coordinates
+            const float radius1 = 10.0f; // 10 meters radius
+            const float radius2 = 15.0f; // 5 meters outside the main radius
+            const float radius3 = 20.0f; // 5 meters outside the secondary radius
+
+            // Simulate enemies in a vector
+            vector<pair<float, float>> enemies = { {1.0f, 2.0f}, {5.0f, 6.0f}, {11.0f, 12.0f}, {16.0f, 17.0f}, {20.0f, 21.0f} };
+
+            for (auto& enemy : enemies) {
+                float distance = sqrt(pow(enemy.first, 2) + pow(enemy.second, 2)); // Calculate distance from player
+                if (distance <= radius1) {
+                    target.applyStatusEffect("burning");
+                    cout << "Enemy at (" << enemy.first << ", " << enemy.second << ") is consumed by the " << name << " within the main radius!" << endl;
+                } else if (distance <= radius2) {
+                    target.applyStatusEffect("heavy_burning");
+                    cout << "Enemy at (" << enemy.first << ", " << enemy.second << ") is affected by heavy burning from the " << name << "!" << endl;
+                } else if (distance <= radius3) {
+                    target.applyStatusEffect("normal_burning");
+                    cout << "Enemy at (" << enemy.first << ", " << enemy.second << ") is affected by normal burning from the " << name << "!" << endl;
+                } else {
+                    target.applyStatusEffect("weak_burning");
+                    cout << "Enemy at (" << enemy.first << ", " << enemy.second << ") is affected by weak burning from the " << name << "!" << endl;
+                }
+            }
+
+            // Start cooldown timer
+            cooldownTimer = 300; // 5 minutes cooldown
         } else {
             // Apply the skill normally based on Sword Mastery level
             int modifiedDamage = damage + (swordMasteryLevel * 3); // Increase flat damage by 3 per level
@@ -117,9 +158,11 @@ private:
     string effect;
     bool isPassive;
     static int attackCounter;
+    static int cooldownTimer; // Cooldown timer in seconds
 };
 
 int Skill::attackCounter = 0;
+int Skill::cooldownTimer = 0;
 
 // Define the Health class
 class Health {
@@ -175,6 +218,7 @@ int main() {
     skills.push_back(Skill("Gunsmith", 0, "gunsmith", true)); // ! Player's firearms deal 15% more damage and found and created weapons have a 27.5% chance to be of a higher tier. 1% chance for an upgrade to skip a tier.
     skills.push_back(Skill("Brawler", 0, "brawler", true)); // ! Player deals 20% more damage with fists and has a 5% chance to bleed enemies, additive with motivation, sharp edge, Kings Regression, and Unholy Crown
     skills.push_back(Skill("Sadistic", 0, "sadist", true)); // ! Deal increasing damage with each attack
+    skills.push_back(Skill("Roots Of Hell", 0, "roots_of_hell")); // ! Stab weapon into the ground, causing fiery destruction
 
     // Get the player's input
     string input;
@@ -206,7 +250,7 @@ int main() {
 
         // Apply the skill
         bool isActive = true; // Assume the skill is active by default
-        if (input == "Sadistic" || input == "Brawler" || input == "Gunsmith" || input == "Fire" || input == "Bloodletting" || input == "Icy bite" || input == "Sword Aura" || input == "Sword Mastery") {
+        if (input == "Sadistic" || input == "Brawler" || input == "Gunsmith" || input == "Fire" || input == "Bloodletting" || input == "Icy bite" || input == "Sword Aura" || input == "Sword Mastery" || input == "Roots Of Hell") {
             isActive = false; // These skills are passive
         }
         skill->apply(playerHealth, swordAuraActive, swordMasteryLevel, motivationActive, isActive);
