@@ -37,7 +37,7 @@ private:
 
     // Function to check if the skill has a status effect
     bool hasStatusEffect() {
-        return (effect == "burning" || effect == "bleeding" || effect == "frostbitten" || effect == "poisoned" );
+        return (effect == "burning" || effect == "bleeding" || effect == "frostbite" || effect == "poisoned" );
     }
 };
 
