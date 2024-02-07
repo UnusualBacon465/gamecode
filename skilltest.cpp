@@ -1,4 +1,7 @@
-// ! skill func.
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -13,7 +16,7 @@ public:
     }
 
     // Function to apply the skill
-    void apply(Health& target, bool swordAuraActive, int swordMasteryLevel) {
+    void apply(class Health& target, bool swordAuraActive, int swordMasteryLevel) {
         // Check if the skill is affected by the sword aura
         if (swordAuraActive && hasStatusEffect()) {
             // Apply the skill with reduced effectiveness based on Sword Mastery level
@@ -61,6 +64,12 @@ public:
         cout << "Health: " << health << endl;
     }
 
+    // Function to buff health and speed
+    void buffHealthAndSpeed(float buffPercentage) {
+        health *= (1.0f + buffPercentage); // Increase health by buffPercentage%
+        cout << "Health is buffed by " << (buffPercentage * 100) << "%!" << endl;
+    }
+
 private:
     int health;
 };
@@ -78,7 +87,7 @@ int main() {
     skills.push_back(Skill("Sword Aura", 0, "sword_aura")); // Special skill for Sword Aura
     skills.push_back(Skill("Sword Mastery", 0, "sword_mastery")); // Special skill for Sword Mastery
     skills.push_back(Skill("Poison Drops", 5, "poison"));
-    skills.push_back(Skill("Motivation", 0,"Motivation")); // ! Special buffing skill
+    skills.push_back(Skill("Motivation", 0, "Motivation")); // ! Special buffing skill
 
     // Get the player's input
     string input;
@@ -103,7 +112,18 @@ int main() {
         int swordMasteryLevel = 3; // Set the Sword Mastery level here
 
         // Apply the skill
-        skill->apply(playerHealth, swordAuraActive, swordMasteryLevel);
+        if (input == "Motivation") {
+            // Buff other skills and health by 15%
+            for (Skill& s : skills) {
+                if (s.name != "Motivation") { // Exclude Motivation itself from buffing
+                    s.apply(playerHealth, swordAuraActive, swordMasteryLevel);
+                }
+            }
+            // Buff health and speed
+            playerHealth.buffHealthAndSpeed(0.15f);
+        } else {
+            skill->apply(playerHealth, swordAuraActive, swordMasteryLevel);
+        }
     } else {
         cout << "Invalid skill!" << endl;
     }
@@ -111,5 +131,5 @@ int main() {
     // Print the player's health
     playerHealth.printHealth();
 
-
+    return 0;
 }
