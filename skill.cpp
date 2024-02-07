@@ -37,7 +37,7 @@ private:
 
     // Function to check if the skill has a status effect
     bool hasStatusEffect() {
-        return (effect == "burning" || effect == "bleeding" || effect == "frostbite");
+        return (effect == "burning" || effect == "bleeding" || effect == "frostbite" || effect == "poisoned" );
     }
 };
 
@@ -77,6 +77,8 @@ int main() {
     skills.push_back(Skill("Icy bite", 20, "frostbite"));
     skills.push_back(Skill("Sword Aura", 0, "sword_aura")); // Special skill for Sword Aura
     skills.push_back(Skill("Sword Mastery", 0, "sword_mastery")); // Special skill for Sword Mastery
+    skills.push_back(Skill("Poison Drops", 5, "poison"));
+    skills.push_back(Skill("Motivation", 0,"Motivation")); // ! Special buffing skill
 
     // Get the player's input
     string input;

@@ -1,0 +1,191 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <cstdlib> // For rand()
+
+using namespace std;
+
+// Define the Skill class
+class Skill {
+public:
+    // Constructor to initialize skill name, damage, and effect
+    Skill(string name, int damage, string effect) {
+        this->name = name;
+        this->damage = damage;
+        this->effect = effect;
+    }
+
+    // Function to apply the skill
+    void apply(class Health& target, bool swordAuraActive, int swordMasteryLevel, bool motivationActive, bool isActive) {
+        if (!isActive) return; // Exit if the skill is not active
+        // Check if the skill is affected by the sword aura
+        if (swordAuraActive && hasStatusEffect()) {
+            // Apply the skill with reduced effectiveness based on Sword Mastery level
+            int reducedDamage = static_cast<int>(damage * (1.0 - (swordMasteryLevel * 0.05))); // Reduce negative effect by 5% per level
+            target.applyStatusEffect(effect);
+            target.health -= reducedDamage;
+            cout << "You used " << name << " with reduced effectiveness due to Sword Aura and Sword Mastery level " << swordMasteryLevel << "!" << endl;
+        } else if (name == "Axis Personality") {
+            // Apply the Axis Personality debuff
+            int debuff = 200; // Base debuff value
+            if (motivationActive) {
+                // Modify debuff based on motivation
+                debuff /= 2; // Half the debuff if motivation is active
+            }
+            target.applyStatusEffect(effect);
+            target.health -= debuff;
+            cout << "You used " << name << " and debuffed the player by " << debuff << " times!" << endl;
+        } else if (name == "Pain Split") {
+            // Apply Pain Split
+            float selfDamagePercentage = 0.2f; // Base self damage percentage
+            if (motivationActive) {
+                selfDamagePercentage *= 0.8f; // Reduce self damage by 20% if motivation is active
+            }
+            float totalDamage = damage * 1.5f; // Deal 50% more damage
+            float selfDamage = min(totalDamage * selfDamagePercentage, 0.5f * target.health); // Cap self damage to 50% of current health
+            target.applyStatusEffect(effect);
+            target.health -= selfDamage;
+            cout << "You used " << name << " and dealt " << totalDamage << " damage, taking " << selfDamage << " as self damage!" << endl;
+        } else if (name == "Sharp Edge") {
+            // Apply Sharp Edge
+            float totalDamage = damage * 1.4f; // Increase damage by 40%
+            target.applyStatusEffect(effect);
+            target.health -= totalDamage;
+            cout << "You used " << name << " and dealt " << totalDamage << " damage!" << endl;
+        } else if (name == "Pyromaniac") {
+            // Apply Pyromaniac
+            float totalDamage = damage * 1.2f; // Increase fire damage by 20%
+            if (rand() % 100 < 5 && !motivationActive) { // 5% chance to self ignite if motivation is not active
+                target.applyStatusEffect("self_ignite");
+                cout << "You used " << name << " and self-ignited due to the Pyromaniac effect!" << endl;
+            }
+            target.applyStatusEffect(effect);
+            target.health -= totalDamage;
+            cout << "You used " << name << " and dealt " << totalDamage << " fire damage!" << endl;
+        } else if (name == "Kings Regression") {
+            // Apply Kings Regression
+            float selfDamage = target.health * 0.3f; // Take 30% of current health as self damage
+            target.applyStatusEffect("bleeding");
+            target.health -= selfDamage;
+            cout << "You used " << name << " and took " << selfDamage << " damage, inflicting bleeding status!" << endl;
+        } else if (name == "Unholy Crown") {
+            // Apply Unholy Crown
+            float totalDamage = damage * 1.4f; // Increase damage by 40%
+            target.applyStatusEffect("strong_bleed");
+            target.health -= totalDamage;
+            cout << "You used " << name << " and dealt " << totalDamage << " damage with strong bleed effect!" << endl;
+        } else {
+            // Apply the skill normally based on Sword Mastery level
+            int modifiedDamage = damage + (swordMasteryLevel * 3); // Increase flat damage by 3 per level
+            target.applyStatusEffect(effect);
+            target.health -= modifiedDamage;
+            cout << "You used " << name << " and triggered the " << effect << " effect with Sword Mastery level " << swordMasteryLevel << "!" << endl;
+        }
+    }
+
+private:
+    string name;
+    int damage;
+    string effect;
+
+    // Function to check if the skill has a status effect
+    bool hasStatusEffect() {
+        return (effect == "burning" || effect == "bleeding" || effect == "frostbite" || effect == "poisoned");
+    }
+};
+
+// Define the Health class
+class Health {
+public:
+    // Constructor to initialize health
+    Health(int initialHealth) {
+        health = initialHealth;
+    }
+
+    // Function to apply a status effect
+    void applyStatusEffect(string effect) {
+        // Apply the status effect
+        // Code to apply the specific effect goes here
+        cout << "The " << effect << " effect is applied!" << endl;
+    }
+
+    // Function to print the health
+    void printHealth() {
+        cout << "Health: " << health << endl;
+    }
+
+    // Function to buff health and speed
+    void buffHealthAndSpeed(float buffPercentage) {
+        health *= (1.0f + buffPercentage); // Increase health by buffPercentage%
+        cout << "Health is buffed by " << (buffPercentage * 100) << "%!" << endl;
+    }
+
+private:
+    int health;
+};
+
+int main() {
+    // Initialize health
+    int initialHealth = 100;
+    Health playerHealth(initialHealth);
+
+    // Create a vector of skills
+    vector<Skill> skills;
+    skills.push_back(Skill("Fire", 10, "burning"));
+    skills.push_back(Skill("Bloodletting", 15, "bleeding"));
+    skills.push_back(Skill("Icy bite", 20, "frostbite"));
+    skills.push_back(Skill("Sword Aura", 0, "sword_aura")); // Special skill for Sword Aura
+    skills.push_back(Skill("Sword Mastery", 0, "sword_mastery")); // Special skill for Sword Mastery
+    skills.push_back(Skill("Poison Drops", 5, "poison"));
+    skills.push_back(Skill("Motivation", 0, "Motivation")); // ! Special buffing skill
+    skills.push_back(Skill("Axis Personality", 0, "axis_personality")); // ! Debuffs the player
+    skills.push_back(Skill("Pain Split", 0, "pain_split")); // ! Buff/debuff makes player deal 50% more damage but take 20% of damage dealt as damage to the player
+    skills.push_back(Skill("Sharp Edge", 0, "sharp_edge")); // ! Adds 40% more damage to all non-elemental attacks
+    skills.push_back(Skill("Pyromaniac", 0, "pyro")); // ! Deals 20% more damage but has a 5% chance to self ignite
+    skills.push_back(Skill("Kings Regression", 0, "kings_regression")); // ! Player stabs self causing 30% health loss and bleed status, but player gains bleed to all attacks and bleed does 60% more damage to enemies, lasting 2 minutes, has a cooldown of 3 minutes.
+    skills.push_back(Skill("Unholy Crown", 0, "unholy_crown")); // ! Player loses 20% of hp upon putting on the crown and gets stronger than normal bleeding status, but deals 50% more damage with ALL attacks
+
+    // Get the player's input
+    string input;
+    cout << "Enter the skill you want to use: ";
+    cin >> input;
+
+    // Find the skill in the vector
+    Skill* skill = nullptr;
+    for (Skill& s : skills) {
+        if (s.name == input) {
+            skill = &s;
+            break;
+        }
+    }
+
+    // If the skill was found, apply it
+    if (skill) {
+        // Check if Sword Aura is active
+        bool swordAuraActive = (input == "Sword Aura");
+
+        // Check if Sword Mastery level is active
+        int swordMasteryLevel = 3; // Set the Sword Mastery level here
+
+        // Check if Motivation is active
+        bool motivationActive = false;
+        if (input == "Motivation") {
+            motivationActive = true;
+        }
+
+        // Apply the skill
+        bool isActive = true; // Assume the skill is active by default
+        if (input == "Motivation" || input == "Sharp Edge" || input == "Pyromaniac") {
+            isActive = false; // These skills are passive
+        }
+        skill->apply(playerHealth, swordAuraActive, swordMasteryLevel, motivationActive, isActive);
+    } else {
+        cout << "Invalid skill!" << endl;
+    }
+
+    // Print the player's health
+    playerHealth.printHealth();
+
+    return 0;
+}
