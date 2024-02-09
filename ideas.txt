@@ -1,0 +1,20 @@
+weapons:
+
+flaming katana
+broken blade
+kings unhole blade
+
+equipment:
+
+kings holy sigil
+
+items:
+
+small sun fragment
+bottle of curses
+
+materials:
+
+demons blood
+bottle of curses
+small sun fragment
