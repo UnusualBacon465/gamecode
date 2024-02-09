@@ -3,6 +3,7 @@ weapons:
 flaming katana
 broken blade
 kings unhole blade
+Wand Of Unholy Remains, (rare) Deals magic damage, you can replace the crystal at the end of the wand with
 
 equipment:
 
@@ -12,9 +13,15 @@ items:
 
 small sun fragment
 bottle of curses
+Crystal Of Burning Dreams. (Rare) Sends a wave of fire magic
+Crystal of Drounded Spirits (Rare) Sends a blot of water magic
+Crystal Of Voided Hopes (Epic) Sends a bolt of void magic
+Crystal Of Unholy Hopes (Epic) Sends a bolt of lighting
+Crystal Of God's Remnants. (legendary) Creates a wave of Holy magic
 
 materials:
 
 demons blood
 bottle of curses
 small sun fragment
+whetstones used to upgrade item tiers
