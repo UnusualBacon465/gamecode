@@ -219,6 +219,7 @@ int main() {
     skills.push_back(Skill("Brawler", 0, "brawler", true)); // ! Player deals 20% more damage with fists and has a 5% chance to bleed enemies, additive with motivation, sharp edge, Kings Regression, and Unholy Crown
     skills.push_back(Skill("Sadistic", 0, "sadist", true)); // ! Deal increasing damage with each attack
     skills.push_back(Skill("Roots Of Hell", 0, "roots_of_hell")); // ! Stab weapon into the ground, causing fiery destruction
+    skills.push_back(Skill("Flash Step", 0, "flash_step", true)); // ! player teleports and can teleport from side to side
 
     // Get the player's input
     string input;

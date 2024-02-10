@@ -2,7 +2,7 @@ weapons:
 
 flaming katana
 broken blade
-kings unhole blade
+kings unholy blade
 Wand Of Unholy Remains, (rare) Deals magic damage, you can replace the crystal at the end of the wand with
 
 equipment:

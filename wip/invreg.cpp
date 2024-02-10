@@ -1,14 +1,11 @@
-// ! reg for inv WIP
-
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 #include <string>
-#include <cmath> // For absolute value
+#include <cstdlib> // For rand() and srand()
+#include <ctime>   // For time()
 
 using namespace std;
 
-// Define an ItemType enum
 enum class ItemType {
     WEAPON,
     ARMOR,
@@ -17,143 +14,81 @@ enum class ItemType {
     KEY
 };
 
-// Define an Item class representing items
 class Item {
 public:
-    Item(ItemType type, const string& name, int stat, int tier, string rarity) : type(type), name(name), stat(stat), tier(tier), rarity(rarity) {}
+    Item(ItemType type, string name, int baseStat) : type(type), name(name), baseStat(baseStat) {}
 
-    // Getter for item type
-    ItemType getType() const { return type; }
+    // Generate a random item
+    static Item generateRandomItem() {
+        // Seed the random number generator
+        srand(time(nullptr));
 
-    // Getter for item name
-    string getName() const { return name; }
+        // Generate a random type
+        ItemType type = static_cast<ItemType>(rand() % 2); // Generates a number between 0 and 1
 
-    // Getter for item stat
-    int getStat() const { return stat; }
+        // Initialize base stat
+        int baseStat = 0;
 
-    // Getter for item tier
-    int getTier() const { return tier; }
+        // Generate random base stat for weapons and armors
+        if (type == ItemType::WEAPON || type == ItemType::ARMOR) {
+            baseStat = rand() % 101; // Generates a number between 0 and 100
+        }
 
-    // Getter for item rarity
-    string getRarity() const { return rarity; }
+        // Generate random name based on item type
+        string name = generateRandomName(type);
+
+        return Item(type, name, baseStat);
+    }
+
+    void display() const {
+        cout << "Type: " << static_cast<int>(type) << endl;
+        cout << "Name: " << name << endl;
+        cout << "Base Stat: " << baseStat << endl;
+    }
 
 private:
     ItemType type;
     string name;
-    int stat;
-    int tier;
-    string rarity;
-};
+    int baseStat;
 
-// Define an Inventory class representing the player's inventory
-class Inventory {
-public:
-    // Function to add an item to the inventory
-    void addItem(const Item& item) {
-        items.push_back(item);
-    }
+    // Generate random name based on item type
+    static string generateRandomName(ItemType type) {
+        vector<string> weaponNames = {"katana", "Wand Of Unholy Remains", "Super Heated Katana", "Broken Blade", "Kings Unholy Blade"};
+        vector<string> armorNames = {"Helmet", "Chestplate", "Leggings", "Boots", "Gloves", "Cloak"};
+        vector<string> consumableNames = {"Health Potion",};
+        vector<string> materialNames = {"Impure Demon's Blood", "Pure Demon's Blood", "Royal Demon's Blood", "Fragment of the Sun", "Shard of the Sun", "Tiny Star", "Mini Star", "Mini Blackhole", "King's Holy Sigil", "Bottle of Curses", "Mythril", "Divine Steel", "Divine Leather", "Demonic Steel", "Whetstone", "Glowing Whetstone", "Rune of Endurance", "Golden Whetstone", "Master's Whetstone"};
+        vector<string> keyNames = {"Key to the Castle"};
 
-    // Function to display the inventory
-    void displayInventory() const {
-        cout << "Inventory:" << endl;
-        for (const auto& item : items) {
-            cout << "Type: " << itemTypeToString(item.getType()) << ", Name: " << item.getName() << ", Stat: " << item.getStat() << ", Tier: " << item.getTier() << ", Rarity: " << item.getRarity() << endl;
-        }
-    }
-
-private:
-    vector<Item> items;
-
-    // Function to convert ItemType enum to string
-    string itemTypeToString(ItemType type) const {
         switch (type) {
             case ItemType::WEAPON:
-                return "Weapon";
+                return weaponNames[rand() % weaponNames.size()];
             case ItemType::ARMOR:
-                return "Armor";
+                return armorNames[rand() % armorNames.size()];
             case ItemType::CONSUMABLE:
-                return "Consumable";
+                return consumableNames[rand() % consumableNames.size()];
             case ItemType::MATERIAL:
-                return "Material";
+                return materialNames[rand() % materialNames.size()];
             case ItemType::KEY:
-                return "Key";
+                return keyNames[rand() % keyNames.size()];
             default:
-                return "Unknown";
-        }
-    }
-};
-
-// Define a Registry class to dynamically add items to the inventory registry
-class Registry {
-public:
-    // Function to add an item to the registry
-    void addItem(const Item& item) {
-        // Find or create a group for the item based on its stat, tier, and rarity
-        int groupKey = findOrCreateGroup(item.getStat(), item.getTier(), item.getRarity());
-        // Add the item to the corresponding group
-        registry[groupKey].push_back(item);
-    }
-
-    // Function to display the registry
-    void displayRegistry() const {
-        cout << "Registry:" << endl;
-        for (const auto& pair : registry) {
-            cout << "Group: " << pair.first << endl;
-            for (const auto& item : pair.second) {
-                cout << "Type: " << itemTypeToString(item.getType()) << ", Name: " << item.getName() << ", Stat: " << item.getStat() << ", Tier: " << item.getTier() << ", Rarity: " << item.getRarity() << endl;
-            }
-        }
-    }
-
-private:
-    unordered_map<int, vector<Item>> registry;
-
-    // Function to find or create a group for an item based on its stat, tier, and rarity
-    int findOrCreateGroup(int stat, int tier, const string& rarity) {
-        // Calculate a unique key based on stat, tier, and rarity
-        int groupKey = (stat << 16) | (tier << 8) | rarity[0]; // Assuming rarity is a single character
-        return groupKey;
-    }
-
-    // Function to convert ItemType enum to string
-    string itemTypeToString(ItemType type) const {
-        switch (type) {
-            case ItemType::WEAPON:
-                return "Weapon";
-            case ItemType::ARMOR:
-                return "Armor";
-            case ItemType::CONSUMABLE:
-                return "Consumable";
-            case ItemType::MATERIAL:
-                return "Material";
-            case ItemType::KEY:
-                return "Key";
-            default:
-                return "Unknown";
+                return "Item";
         }
     }
 };
 
 int main() {
-    // Create an instance of the Inventory class
-    Inventory inventory;
+    vector<Item> items;
 
-    // Create an instance of the Registry class
-    Registry registry;
+    // Generate random items
+    for (int i = 0; i < 5; ++i) {
+        items.push_back(Item::generateRandomItem());
+    }
 
-    // Add some items to the registry
-    registry.addItem(Item(ItemType::WEAPON, "Sword", 100, 1, "Common"));
-    registry.addItem(Item(ItemType::WEAPON, "Axe", 95, 2, "Rare"));
-    registry.addItem(Item(ItemType::WEAPON, "Bow", 110, 1, "Common"));
-    registry.addItem(Item(ItemType::WEAPON, "Staff", 105, 2, "Rare"));
-
-    // Add some more items to the registry
-    registry.addItem(Item(ItemType::ARMOR, "Helmet", 50, 1, "Common"));
-    registry.addItem(Item(ItemType::ARMOR, "Chestplate", 45, 2, "Rare"));
-    registry.addItem(Item(ItemType::ARMOR, "Leggings", 55, 1, "Common"));
-
-    // Display the registry
-    registry.displayRegistry();
+    // Display the generated items
+    for (const auto& item : items) {
+        item.display();
+        cout << endl;
+    }
 
     return 0;
 }

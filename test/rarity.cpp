@@ -6,7 +6,7 @@
 
 // Define the rarity levels
 const std::string rarities[] = {
-    "common", "uncommon", "rare", "epic", "legendary", "mythic", "divine", "demonic", "artifact"
+    "common", "uncommon", "rare", "epic", "legendary", "mythical", "divine", "demonic", "artifact"
 };
 
 // Define the bonus percentages of each rarity
