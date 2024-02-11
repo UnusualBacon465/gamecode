@@ -212,14 +212,15 @@ int main() {
     skills.push_back(Skill("Pain Split", 0, "pain_split"));
     skills.push_back(Skill("Sharp Edge", 0, "sharp_edge", true)); // ! Adds 40% more damage to all non-elemental attacks
     skills.push_back(Skill("Pyromaniac", 0, "pyro", true)); // ! Deals 20% more damage but has a 5% chance to self ignite
-    skills.push_back(Skill("Kings Regression", 0, "kings_regression", true)); // ! Player stabs self causing 30% health loss and bleed status, but player gains bleed to all attacks and bleed does 60% more damage to enemies, lasting 2 minutes, has a cooldown of 3 minutes.
-    skills.push_back(Skill("Unholy Crown", 0, "unholy_crown", true)); // ! Player loses 20% of hp upon putting on the crown and gets stronger than normal bleeding status, but deals 50% more damage with ALL attacks
+    skills.push_back(Skill("Kings Regression", 0, "kings_regression")); // ! Player stabs self causing 30% health loss and bleed status, but player gains bleed to all attacks and bleed does 60% more damage to enemies, lasting 2 minutes, has a cooldown of 3 minutes.
+    skills.push_back(Skill("Unholy Crown", 0, "unholy_crown")); // ! Player loses 20% of hp upon putting on the crown and gets stronger than normal bleeding status, but deals 50% more damage with ALL attacks
     skills.push_back(Skill("Ashen Slash", 15, "radioactive"));
     skills.push_back(Skill("Gunsmith", 0, "gunsmith", true)); // ! Player's firearms deal 15% more damage and found and created weapons have a 27.5% chance to be of a higher tier. 1% chance for an upgrade to skip a tier.
     skills.push_back(Skill("Brawler", 0, "brawler", true)); // ! Player deals 20% more damage with fists and has a 5% chance to bleed enemies, additive with motivation, sharp edge, Kings Regression, and Unholy Crown
     skills.push_back(Skill("Sadistic", 0, "sadist", true)); // ! Deal increasing damage with each attack
     skills.push_back(Skill("Roots Of Hell", 0, "roots_of_hell")); // ! Stab weapon into the ground, causing fiery destruction
-    skills.push_back(Skill("Flash Step", 0, "flash_step", true)); // ! player teleports and can teleport from side to side
+    skills.push_back(Skill("Flash Step", 0, "flash_step")); // ! player teleports and can teleport from side to side
+    skills.push_back(Skill("Judgement Day", 0, "judgement_day")); // ! player cuts everythings around them in a 20m radius obliterating everything in its radius, has a cooldown of 7m.   
 
     // Get the player's input
     string input;
