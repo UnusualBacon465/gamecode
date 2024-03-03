@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Define the Skill class
+class Skill {
+public:
+    Skill(string name) : name(name) {}
+
+    string getName() const {
+        return name;
+    }
+
+private:
+    string name;
+};
+
+// Define the Player class
+class Player {
+public:
+    // Constructor to initialize the player with skills
+    Player(const vector<Skill>& initialSkills) : skills(initialSkills) {}
+
+    // Function to check if the player has a specific skill
+    bool hasSkill(const string& skillName) const {
+        for (const Skill& skill : skills) {
+            if (skill.getName() == skillName) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+private:
+    vector<Skill> skills;
+};
+
+int main() {
+    // Define some sample skills
+    Skill fireball("Fireball");
+    Skill swordMastery("Sword Mastery");
+    Skill poisonResistance("Poison Resistance");
+
+    // Create a player with initial skills
+    vector<Skill> initialSkills = {fireball, swordMastery, poisonResistance};
+    Player player(initialSkills);
+
+    // Check if the player has certain skills
+    cout << "Does the player have Fireball? " << (player.hasSkill("Fireball") ? "Yes" : "No") << endl;
+    cout << "Does the player have Sword Mastery? " << (player.hasSkill("Sword Mastery") ? "Yes" : "No") << endl;
+    cout << "Does the player have Ice Magic? " << (player.hasSkill("Ice Magic") ? "Yes" : "No") << endl;
+
+    return 0;
+}

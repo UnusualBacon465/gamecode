@@ -201,26 +201,27 @@ int main() {
 
     // Create a vector of skills
     vector<Skill> skills;
-    skills.push_back(Skill("Fire", 10, "burning", true));
-    skills.push_back(Skill("Bloodletting", 15, "bleeding", true));
-    skills.push_back(Skill("Icy bite", 20, "frostbite", true));
-    skills.push_back(Skill("Sword Aura", 0, "sword_aura", true)); // Special skill for Sword Aura
-    skills.push_back(Skill("Sword Mastery", 0, "sword_mastery", true)); // Special skill for Sword Mastery
-    skills.push_back(Skill("Poison Drops", 5, "poison", true));
+    skills.push_back(Skill("Fire", 10, "burning", true)); // ! burns the enemy and gives burning debuff which deals a % amount of dot
+    skills.push_back(Skill("Bloodletting", 20, "bleeding", true)); // ! bleeds the enemy for a % of their max hp and gets higher % and slightly longer bleed duration the higher the stacks
+    skills.push_back(Skill("Icy bite", 15, "frostbite", true)); // ! freezes the attacked enemy clashes with fire, if fire and frostbite are both owned steam is made causing damage
+    skills.push_back(Skill("Sword Aura", 0, "sword_aura", true)); // ! all passive skills will deal less damage but can all be used at once higher stacks give damage back and at somepoint more damage than before
+    skills.push_back(Skill("Sword Mastery", 0, "sword_mastery", true)); // ! deal more flat damage with all sword type weapons, higher stacks = more flat damage
+    skills.push_back(Skill("Poison Drops", 5, "poison", true)); // ! every attack from a sword type weapon poisons, higher stacks of skill gives more dot
     skills.push_back(Skill("Motivation", 0, "Motivation", true)); // ! Special buffing skill
     skills.push_back(Skill("Axis Personality", 0, "axis_personality", true)); // ! Debuffs the player
-    skills.push_back(Skill("Pain Split", 0, "pain_split"));
+    skills.push_back(Skill("Pain Split", 0, "pain_split", true)); // ! player takes 50% less damage and deals the other 50% back to the attacker but debuffs stack 200% more
     skills.push_back(Skill("Sharp Edge", 0, "sharp_edge", true)); // ! Adds 40% more damage to all non-elemental attacks
     skills.push_back(Skill("Pyromaniac", 0, "pyro", true)); // ! Deals 20% more damage but has a 5% chance to self ignite
     skills.push_back(Skill("Kings Regression", 0, "kings_regression")); // ! Player stabs self causing 30% health loss and bleed status, but player gains bleed to all attacks and bleed does 60% more damage to enemies, lasting 2 minutes, has a cooldown of 3 minutes.
     skills.push_back(Skill("Unholy Crown", 0, "unholy_crown")); // ! Player loses 20% of hp upon putting on the crown and gets stronger than normal bleeding status, but deals 50% more damage with ALL attacks
-    skills.push_back(Skill("Ashen Slash", 15, "radioactive"));
+    skills.push_back(Skill("Ashen Slash", 15, "radioactive", true)); // ! each slash of a sword type weapon deals 5% more damage and sets the enemy or enemies on fire and irradiates them
     skills.push_back(Skill("Gunsmith", 0, "gunsmith", true)); // ! Player's firearms deal 15% more damage and found and created weapons have a 27.5% chance to be of a higher tier. 1% chance for an upgrade to skip a tier.
     skills.push_back(Skill("Brawler", 0, "brawler", true)); // ! Player deals 20% more damage with fists and has a 5% chance to bleed enemies, additive with motivation, sharp edge, Kings Regression, and Unholy Crown
     skills.push_back(Skill("Sadistic", 0, "sadist", true)); // ! Deal increasing damage with each attack
-    skills.push_back(Skill("Roots Of Hell", 0, "roots_of_hell")); // ! Stab weapon into the ground, causing fiery destruction
-    skills.push_back(Skill("Flash Step", 0, "flash_step")); // ! player teleports and can teleport from side to side
-    skills.push_back(Skill("Judgement Day", 0, "judgement_day")); // ! player cuts everythings around them in a 20m radius obliterating everything in its radius, has a cooldown of 7m.   
+    skills.push_back(Skill("Roots Of Hell", 0, "roots_of_hell", false)); // ! Stab weapon into the ground, causing fiery destruction
+    skills.push_back(Skill("Flash Step", 0, "flash_step", false)); // ! player teleports and can teleport from side to side
+    skills.push_back(Skill("Judgement Day", 0, "judgement_day", false)); // ! player cuts everythings around them in a 20m radius obliterating everything in its radius, has a cooldown of 7m.   
+    skills.push_back(Skill("Star Fall",0"star_fall", false)) // ! unknown.
 
     // Get the player's input
     string input;
