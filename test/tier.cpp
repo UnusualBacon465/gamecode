@@ -14,9 +14,9 @@ const std::string specialMaterials[numTiers] = {
     "steel ingot",
     "mithril bar",
     "adamantine ingot",
-    "dragon scale" // * current materials are to be changed
+    "dragon scale"
 };
-
+// * current materials are to be changed
 // Function to generate a random weapon or equipment
 void generateItem(int level, int tier) {
     // Generate a random name for the item
@@ -26,16 +26,18 @@ void generateItem(int level, int tier) {
     int attack = rand() % 10 + 1;
     int defense = rand() % 10 + 1;
     int health = rand() % 10 + 1;
+    int speed = rand() % 10 + 1;
 
     // Apply the tier bonus to the stats
     attack += attack * tierBonuses[tier] / 100;
     defense += defense * tierBonuses[tier] / 100;
     health += health * tierBonuses[tier] / 100;
+    speed += speed * tierBonuses[tier] / 100;
 
     // Print the item's name, tier, and stats
     std::cout << "Item: " << name << std::endl;
     std::cout << "Tier: " << tier << std::endl;
-    std::cout << "Stats: Attack=" << attack << ", Defense=" << defense << ", Health=" << health << std::endl;
+    std::cout << "Stats: Attack=" << attack << ", Defense=" << defense << ", Health=" << health << ", Attack=" << speed  std::endl;
 }
 
 int main() {
