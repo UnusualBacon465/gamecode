@@ -8,6 +8,7 @@
 const int numTiers = 5;
 const int tierBonuses[numTiers] = {0, 50, 100, 150, 200};
 
+// * current materials are to be changed
 // Define the special materials required for each tier
 const std::string specialMaterials[numTiers] = {
     "iron ore",
@@ -16,7 +17,7 @@ const std::string specialMaterials[numTiers] = {
     "adamantine ingot",
     "dragon scale"
 };
-// * current materials are to be changed
+
 // Function to generate a random weapon or equipment
 void generateItem(int level, int tier) {
     // Generate a random name for the item
